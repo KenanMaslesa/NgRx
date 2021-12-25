@@ -1,5 +1,10 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { ProductState } from "./product.reducers";
+import * as AppState from '../../store/app.state';
+
+export interface State extends AppState.State {
+  products: ProductState;
+}
 
 const getProductFeatuureState = createFeatureSelector<ProductState>('products');
 

@@ -4,8 +4,7 @@ import { Observable } from 'rxjs';
 
 import { Product } from '../product';
 import * as ProductActions from '../store/product.actions';
-import { State } from '../store/product.reducers';
-import { getCurrentProduct, getError, getProducts, getShowProductCode } from '../store/product.selectors';
+import { getCurrentProduct, getError, getProducts, getShowProductCode, State } from '../store';
 
 @Component({
   selector: 'pm-product-list',

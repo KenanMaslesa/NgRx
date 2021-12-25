@@ -1,11 +1,8 @@
 import { createReducer, on } from "@ngrx/store";
 import { Product } from "../product";
-import * as AppState from '../../store/app.state';
 import * as ProductActions from "./product.actions";
 
-export interface State extends AppState.State {
-  products: ProductState;
-}
+
 
 export interface ProductState {
   showProductCode: boolean;
