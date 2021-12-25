@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 import { Product } from '../product';
 import { ProductService } from '../product.service';
 import * as ProductActions from '../store/product.actions';
 import { State } from '../store/product.reducers';
-import { getCurrentProduct, getShowProductCode } from '../store/product.selectors';
+import { getCurrentProduct, getError, getProducts, getShowProductCode } from '../store/product.selectors';
 
 @Component({
   selector: 'pm-product-list',
@@ -14,14 +15,14 @@ import { getCurrentProduct, getShowProductCode } from '../store/product.selector
 })
 export class ProductListComponent implements OnInit {
   pageTitle = 'Products';
-  errorMessage: string;
-
   displayCode: boolean;
 
   products: Product[];
 
   // Used to highlight the selected product in the list
   selectedProduct: Product | null;
+  products$: Observable<Product[]>;
+  errorMessage$: Observable<string>;
 
   constructor(private store: Store<State>,private productService: ProductService) { }
 
@@ -30,10 +31,11 @@ export class ProductListComponent implements OnInit {
       currentProduct => this.selectedProduct = currentProduct
     );
 
-    this.productService.getProducts().subscribe({
-      next: (products: Product[]) => this.products = products,
-      error: err => this.errorMessage = err
-    });
+    this.products$ = this.store.select(getProducts);
+
+    this.errorMessage$ = this.store.select(getError);
+
+    this.store.dispatch(ProductActions.loadProducts()); //'calling' effect
 
     this.store.select(getShowProductCode).subscribe(showProductCode => {
       this.displayCode = showProductCode;
