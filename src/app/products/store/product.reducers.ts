@@ -1,4 +1,6 @@
+import { state } from "@angular/animations";
 import { createReducer, on } from "@ngrx/store";
+import { Action } from "rxjs/internal/scheduler/Action";
 import { Product } from "../product";
 import * as ProductActions from "./product.actions";
 
@@ -76,6 +78,22 @@ export const productReducer = createReducer(
     }
   }),
   on(ProductActions.updateProductFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+  on(ProductActions.deleteProductSuccess, (state, action) => {
+    const updatedProducts = state.products.filter(product =>
+      action.productId !== product.id
+    )
+    return {
+      ...state,
+      products: updatedProducts,
+      error: ''
+    }
+  }),
+  on(ProductActions.deleteProductFailure, (state, action) => {
     return {
       ...state,
       error: action.error
