@@ -1,10 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { Product } from '../product';
-import * as ProductActions from '../store/product.actions';
-import { getCurrentProduct, getError, getProducts, getShowProductCode, State } from '../store';
+import { ProductFacade } from '../store/product.facade';
 
 @Component({
   selector: 'pm-product-list',
@@ -19,30 +17,30 @@ export class ProductListComponent implements OnInit {
   selectedProduct$: Observable<Product>;
   displayCode$: Observable<boolean>;
 
-  constructor(private store: Store<State>) { }
+  constructor(private productFacade: ProductFacade) { }
 
   ngOnInit(): void {
-    this.selectedProduct$ = this.store.select(getCurrentProduct);
+    this.selectedProduct$ = this.productFacade.selectedProduct$;
 
-    this.products$ = this.store.select(getProducts);
+    this.products$ = this.productFacade.products$;
 
-    this.errorMessage$ = this.store.select(getError);
+    this.errorMessage$ = this.productFacade.errorMessage$;
 
-    this.store.dispatch(ProductActions.loadProducts()); //'calling' effect
+    this.productFacade.loadProducts();
 
-    this.displayCode$ = this.store.select(getShowProductCode);
+    this.displayCode$ = this.productFacade.displayCode$;
   }
 
   checkChanged(): void {
-    this.store.dispatch(ProductActions.toggleProductCode());
+    this.productFacade.toggleProductCode();
   }
 
   newProduct(): void {
-    this.store.dispatch(ProductActions.initializeCurrentProduct());
+    this.productFacade.initializeCurrentProduct();
   }
 
   productSelected(product: Product): void {
-    this.store.dispatch(ProductActions.setCurrentProduct({product}));
+    this.productFacade.setCurrentProduct(product);
   }
 
 }

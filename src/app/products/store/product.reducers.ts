@@ -90,6 +90,7 @@ export const productReducer = createReducer(
     return {
       ...state,
       products: updatedProducts,
+      currentProduct: null,
       error: ''
     }
   }),
