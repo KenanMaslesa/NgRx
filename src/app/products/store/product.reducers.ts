@@ -100,12 +100,9 @@ export const productReducer = createReducer(
     }
   }),
   on(ProductActions.createProductSuccess, (state, action) => {
-    debugger
-    const updatedProducts = [...state.products, action.product];
-
     return {
       ...state,
-      products: updatedProducts,
+      products: [...state.products, action.product],
       currentProduct: null,
       error: ''
     }
